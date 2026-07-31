@@ -61,6 +61,12 @@ npm start
 
 Stop the server with `Ctrl+C`. Restarting it does not remove `data/todos.db`, so saved tasks persist.
 
+To run all automated checks in one command:
+
+```bash
+npm run check
+```
+
 ## Documentation and AI transcript
 
 - [Database design](docs/DATABASE.md)
