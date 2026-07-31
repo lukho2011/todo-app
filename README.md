@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Things Worth Finishing
 
-## Getting Started
+A local-first todo application built for COMS3011A Lab 1. It runs on one machine for one user and stores tasks in SQLite.
 
-First, run the development server:
+## Third-Party Code
+
+- **Next.js 16**: Provides the App Router, server runtime, route handlers, and production build tooling.
+- **React 19** and **React DOM 19**: Provide the interactive task form and task list UI.
+- **Tailwind CSS 4** and **@tailwindcss/postcss**: Provide the CSS processing setup used by the Next.js project.
+- **better-sqlite3**: Provides a synchronous, local SQLite driver that is simple and reliable for a single-user desktop-style application.
+- **Vitest**: Provides a fast test runner for deterministic behavior tests.
+- **TypeScript**: Provides static types for task data, API boundaries, and React components.
+- **ESLint** and **eslint-config-next**: Catch JavaScript, TypeScript, React, and Next.js problems before submission.
+
+## Database Design
+
+The runtime database is `data/todos.db`, created automatically on first API use. The checked-in schema is [docs/DATABASE.md](docs/DATABASE.md) and [src/lib/schema.sql](src/lib/schema.sql).
+
+The schema contains one `tasks` table with title, description, due date, topic, fixed status, and nullable `archived_at` fields. There are no relationships because this single-user application has no second entity table. Archiving sets `archived_at` on the existing row; it never deletes the task. Overdue is derived at read time from the due date and status, so it is not a stored status or column.
+
+## Running It
+
+### Prerequisites
+
+Use **Node.js 22 LTS** (Node.js 20 LTS is also suitable). The development machine used for this repository currently has Node.js `v24.14.0`; the application passed lint, tests, and production build there, but the assignment's clean-clone prerequisite should use Node 20 or 22 LTS.
+
+Git is required to clone the repository.
+
+### Clean clone and install
+
+```bash
+git clone https://github.com/lukho2011/todo-app.git
+cd todo-app
+npm install
+```
+
+No manual database setup is needed. The application creates `data/todos.db` from the committed schema on its first request.
+
+### Test
+
+```bash
+npm test
+```
+
+The tests create throwaway SQLite databases in the operating system temporary directory and clean them up. They do not depend on `data/todos.db` or on any developer data.
+
+### Development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000. Create tasks with title, description, due date, topic, and one of the three statuses: Todo, In progress, or Complete. Use the controls to edit, archive, view archived tasks, and sort by due date, topic, or status. Overdue tasks are visibly marked separately from status.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production check
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+Stop the server with `Ctrl+C`. Restarting it does not remove `data/todos.db`, so saved tasks persist.
 
-To learn more about Next.js, take a look at the following resources:
+## Documentation and AI transcript
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Database design](docs/DATABASE.md)
+- [AI usage transcript](docs/AI-USAGE.md)
+- The assignment source PDF is included as [lab_one.pdf](lab_one.pdf).
